@@ -82,6 +82,26 @@ export const apiClient = {
     const response = await api.get(`/posts/${postId}/comments/`);
     return response.data;
   },
+
+  // Posts with image support
+  async createPostWithImage(formData) {
+    const response = await api.post('/posts/', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    });
+    return response.data;
+  },
+
+  async updatePostWithImage(id, formData) {
+    const response = await api.put(`/posts/${id}/`, formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    });
+    return response.data;
+  },
 };
+
 
 export default api;

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { apiClient } from './api';
+import CreatePost from './CreatePost';
 import './App.css';
 
 function App() {
@@ -9,7 +10,7 @@ function App() {
   const [selectedCategory, setSelectedCategory] = useState('');
   const [searchTerm, setSearchTerm] = useState('');
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [user, setUser] = useState(null);
+  const [showCreatePost, setShowCreatePost] = useState(false);
   
   // Login form state
   const [showLogin, setShowLogin] = useState(false);
@@ -70,7 +71,7 @@ function App() {
   const handleLogout = () => {
     apiClient.logout();
     setIsLoggedIn(false);
-    setUser(null);
+    setShowCreatePost(false);
   };
 
   const fetchPopularPosts = async () => {
@@ -85,16 +86,28 @@ function App() {
     }
   };
 
+  const handlePostCreated = () => {
+    setShowCreatePost(false);
+    fetchPosts(); // Listeyi yenile
+  };
+
   return (
     <div className="App">
       <header className="App-header">
-        <h1>🚀 Blog API Test Frontend</h1>
+        <h1>🚀 Modern Blog Platform</h1>
         
         {/* Auth Section */}
         <div className="auth-section">
           {isLoggedIn ? (
-            <div>
+            <div className="auth-buttons">
               <span>✅ Giriş yapıldı</span>
+              <button 
+                onClick={() => setShowCreatePost(true)} 
+                className="btn btn-success"
+                disabled={showCreatePost}
+              >
+                📝 Yeni Post
+              </button>
               <button onClick={handleLogout} className="btn btn-secondary">
                 Çıkış Yap
               </button>
@@ -162,6 +175,14 @@ function App() {
         </div>
       </header>
 
+      {/* Create Post Modal */}
+      {showCreatePost && (
+        <CreatePost
+          onPostCreated={handlePostCreated}
+          onCancel={() => setShowCreatePost(false)}
+        />
+      )}
+
       <main className="main-content">
         {loading ? (
           <div className="loading">Yükleniyor... ⏳</div>
@@ -169,21 +190,30 @@ function App() {
           <div className="posts-grid">
             {posts.map(post => (
               <div key={post.id} className="post-card">
-                <h3>{post.title}</h3>
-                <p className="post-meta">
-                  👤 {post.author.username} | 
-                  📅 {new Date(post.created_at).toLocaleDateString('tr-TR')} |
-                  📁 {post.category?.name || 'Kategori yok'} |
-                  💬 {post.comments_count || 0} yorum
-                </p>
-                <p className="post-content">
-                  {post.content.length > 150 
-                    ? post.content.substring(0, 150) + '...' 
-                    : post.content
-                  }
-                </p>
-                <div className="post-status">
-                  Status: <span className={`status ${post.status}`}>{post.status}</span>
+                {/* Post Image */}
+                {post.image_url && (
+                  <div className="post-image">
+                    <img src={post.image_url} alt={post.title} />
+                  </div>
+                )}
+                
+                <div className="post-content">
+                  <h3>{post.title}</h3>
+                  <p className="post-meta">
+                    👤 {post.author.username} | 
+                    📅 {new Date(post.created_at).toLocaleDateString('tr-TR')} |
+                    📁 {post.category?.name || 'Kategori yok'} |
+                    💬 {post.comments_count || 0} yorum
+                  </p>
+                  <p className="post-text">
+                    {post.content.length > 150 
+                      ? post.content.substring(0, 150) + '...' 
+                      : post.content
+                    }
+                  </p>
+                  <div className="post-status">
+                    Status: <span className={`status ${post.status}`}>{post.status}</span>
+                  </div>
                 </div>
               </div>
             ))}
@@ -192,7 +222,7 @@ function App() {
         
         {posts.length === 0 && !loading && (
           <div className="no-posts">
-            📭 Henüz post yok. Admin panelinden post ekleyin!
+            📭 Henüz post yok. {isLoggedIn ? 'Yeni post oluşturun!' : 'Giriş yapıp post oluşturun!'}
           </div>
         )}
       </main>

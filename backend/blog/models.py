@@ -20,6 +20,7 @@ class Post(models.Model):
     
     title = models.CharField(max_length=200)
     content = models.TextField()
+    image = models.ImageField(upload_to='posts/', null=True, blank=True)  # YENİ ALAN
     status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='draft')
     author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='posts')
     category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, blank=True)
