@@ -11,14 +11,16 @@ SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-your-development-key-
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get('DEBUG', 'True') == 'True'
 
-# Geçici olarak tüm host'lara izin verelim
-ALLOWED_HOSTS = ['*']  # Production'da güvenli değil ama test için
-
+# CORS ayarları - dosyanın sonuna ekle/güncelle
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
-    "http://127.0.0.1:3000", 
-    "https://modern-blog-platform-seven.vercel.app",
+    "http://127.0.0.1:3000",
+    "https://modern-blog-platform-seven.vercel.app",  # Vercel domain'i
 ]
+
+# Geçici olarak tüm origin'lere izin ver (test için)
+CORS_ALLOW_ALL_ORIGINS = True
+CORS_ALLOW_CREDENTIALS = True
 
 # CSRF ayarları
 CSRF_TRUSTED_ORIGINS = [
@@ -33,8 +35,8 @@ ALLOWED_HOSTS = [
     'localhost',
     '127.0.0.1',
     'modern-blog-platform-production.up.railway.app',
+    '.vercel.app',  # Tüm Vercel domain'lerine izin ver
 ]
-
 # Application definition
 INSTALLED_APPS = [
     'django.contrib.admin',
