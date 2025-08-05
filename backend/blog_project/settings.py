@@ -14,23 +14,26 @@ DEBUG = os.environ.get('DEBUG', 'True') == 'True'
 # Geçici olarak tüm host'lara izin verelim
 ALLOWED_HOSTS = ['*']  # Production'da güvenli değil ama test için
 
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:3000",
+    "http://127.0.0.1:3000", 
+    "https://modern-blog-platform-seven.vercel.app",
+]
+
 # CSRF ayarları
 CSRF_TRUSTED_ORIGINS = [
-    "https://*.up.railway.app",  # Tüm Railway domain'lerine izin ver
+    "https://modern-blog-platform-production.up.railway.app",
     "https://modern-blog-platform-seven.vercel.app",
     "http://localhost:3000",
     "http://127.0.0.1:3000",
 ]
 
-# CORS ayarları
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:3000", 
-    "http://127.0.0.1:3000",
-    "https://modern-blog-platform-seven.vercel.app",
+# Allowed hosts
+ALLOWED_HOSTS = [
+    'localhost',
+    '127.0.0.1',
+    'modern-blog-platform-production.up.railway.app',
 ]
-
-CORS_ALLOW_ALL_ORIGINS = True  # Geçici olarak tüm origin'lere izin ver
-CORS_ALLOW_CREDENTIALS = True
 
 # Application definition
 INSTALLED_APPS = [
