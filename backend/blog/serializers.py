@@ -26,7 +26,7 @@ class PostSerializer(serializers.ModelSerializer):
     category_id = serializers.IntegerField(write_only=True, required=False)
     comments = CommentSerializer(many=True, read_only=True)
     comments_count = serializers.SerializerMethodField()
-    image_url = serializers.SerializerMethodField()  # YENİ ALAN
+    image_url = serializers.SerializerMethodField()
     
     class Meta:
         model = Post
@@ -40,7 +40,9 @@ class PostSerializer(serializers.ModelSerializer):
         if obj.image:
             request = self.context.get('request')
             if request:
-                return request.build_absolute_uri(obj.image.url)
+                url = request.build_absolute_uri(obj.image.url)
+                # HTTP'yi HTTPS'ye çevir (Production için)
+                return url.replace('http://', 'https://')
         return None
     
     def create(self, validated_data):
