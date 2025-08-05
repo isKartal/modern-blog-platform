@@ -11,11 +11,28 @@ SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-your-development-key-
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get('DEBUG', 'True') == 'True'
 
+# CSRF ayarları - dosyanın sonuna ekle
+CSRF_TRUSTED_ORIGINS = [
+    "https://modern-blog-platform-production-xxxx.up.railway.app",  # Railway URL'ini buraya koy
+    "https://modern-blog-platform-seven.vercel.app",  # Vercel URL'i
+    "http://localhost:3000",
+    "http://127.0.0.1:3000",
+]
+
+# CORS ayarları da ekle
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:3000",
+    "http://127.0.0.1:3000",
+    "https://modern-blog-platform-production.up.railway.app/",
+]
+
+CORS_ALLOW_CREDENTIALS = True
+
+# Allowed hosts
 ALLOWED_HOSTS = [
     'localhost',
     '127.0.0.1',
-    '.railway.app',  # Railway deployment
-    '.vercel.app',   # Eğer frontend başka yerdeyse
+    'modern-blog-platform-production-xxxx.up.railway.app',  # Railway domain'ini buraya koy
 ]
 
 # Application definition
